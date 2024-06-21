@@ -1,0 +1,70 @@
+﻿
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=UTF-8>
+    <title>drag&amp;drop</title>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=hCzNFVTZqYHePrN2T9EwDuAN8zQAf3LgUHRqRXJIP0rkEdFeNkwp6c37I-7mfLti0pdLhkUc99yhgHXvUJb8RMCwAuCL2ZGQXsjpgzIsz5c" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9mZS5pdC1hY2FkZW15LmJ5L1NpdGVzLzAwMDAwMDcvZHJhZ2Ryb3AuaHRtbA"/></head>
+  <body style='min-height: 100vh'>
+<img src='http://fe.it-academy.by/Sites/0000007/sax.jpg'>
+<img src='http://fe.it-academy.by/Sites/0000007/Yin_and_Yang.png' width=100>
+<img src='http://fe.it-academy.by/Sites/0000007/Man-and-woman.png' width=150>
+<img src='http://fe.it-academy.by/Sites/0000007/No_smoking.png' style='padding-left: 50px'>
+
+<script>
+        "use strict";
+        let shiftX, shiftY;
+        let currImg=null;
+         let nextZindex = 100;
+        function mouseDown(eo){
+         eo=eo||window.event;
+         eo.preventDefault();
+         currImg=eo.target
+         shiftX=eo.pageX-eo.target.offsetLeft;
+         shiftY=eo.pageY-eo.target.offsetTop;
+          window.addEventListener("mousemove", mouseMove);
+          currImg.style.cursor="drag"
+          currImg.style.zIndex= nextZindex++;
+                }
+ 
+function mouseMove(eo){
+    eo = eo || window.event;
+    eo.preventDefault();
+if(currImg){
+    currImg.style.left=(eo.pageX-shiftX)+"px";
+    currImg.style.top = (eo.pageY - shiftY) + "px";
+}
+    
+}
+ 
+function mouseUp(eo){
+    eo = eo || window.event;
+    eo.preventDefault();
+      currImg.style.cursor = "";
+    currImg=null;
+     window.removeEventListener("mousemove", mouseMove);
+    
+}
+ 
+function pos(){
+    const images=document.getElementsByTagName("img");
+    const arr=[];
+    for(const img of images){
+        arr.push({x:img.offsetLeft,y:img.offsetTop});
+         }
+         for (let i=0; i<images.length; i++){
+            const img=images[i];
+            img.style.left=arr[i] .x+"px";
+            img.style.top = arr[i].y + "px";
+            img.style.position="absolute";
+            img.addEventListener("mousedown", mouseDown);
+           
+            img.addEventListener("mouseup", mouseUp);
+         }
+        
+}
+window.onload=pos;
+ 
+        </script>
+  </body>
+</html>
