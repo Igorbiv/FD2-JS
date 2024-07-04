@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TENNIS</title>
+</head>
+
+<body>
+    <script>
+        "use strict";
+
+        const AREA_WIDTH = 500;
+        const AREA_HEIGHT = 400;
+        const BALL_WIDTH = 10;
+        const BALL_HEIGHT = 10;
+        const RACKET_WIDTH = 10;
+        const RACKET_HEIGHT = 50;
+
+        let start = document.createElement('button');
+        start.innerHTML = 'CТАРТ';
+        document.body.appendChild(start);
+        let score = document.createElement('div');
+        let scoreLeft = document.createElement('span');
+        let scoreRight = document.createElement('span');
+        let scoreColon = document.createElement('span');
+        scoreLeft.id = 'scoreLeft';
+        scoreLeft.innerHTML = 0;
+        scoreColon.innerHTML = ':';
+        scoreRight.id = 'scoreRight';
+        scoreRight.innerHTML = 0;
+        document.body.appendChild(score);
+        score.appendChild(scoreLeft);
+        score.appendChild(scoreColon);
+        score.appendChild(scoreRight);
+
+        let divArea = document.createElement('div');
+        divArea.id = 'area';
+        divArea.style.backgroundColor = 'blue';
+        divArea.style.position = 'relative';
+        divArea.style.border = 1 + 'px solid blue';
+        document.body.appendChild(divArea);
+
+        let area = {
+            width: AREA_WIDTH,
+            height: AREA_HEIGHT,
+
+            update: function () {
+                let area = document.getElementById('area');
+                area.style.width = this.width + 'px';
+                area.style.height = this.height + 'px';
+            }
+        }
+
+        let divBall = document.createElement('div');
+        divBall.id = 'ball';
+        divArea.appendChild(divBall);
+
+        let ball = {
+            width: BALL_WIDTH,
+            height: BALL_HEIGHT,
+            posX: AREA_WIDTH / 2 - BALL_WIDTH / 2,
+            posY: AREA_HEIGHT / 2 - BALL_HEIGHT / 2,
+            speedX: 0,
+            speedY: 0,
+
+            update: function () {
+                let ball = document.getElementById('ball');
+                ball.style.borderRadius = 50 + '%';
+                ball.style.backgroundColor = 'yellow';
+                ball.style.position = 'absolute';
+                ball.style.left = this.posX + 'px';
+                ball.style.top = this.posY + 'px';
+                ball.style.width = this.width + 'px';
+                ball.style.height = this.height + 'px';
+            },
+
+            run: function () {
+                this.posX = AREA_WIDTH / 2 - BALL_WIDTH / 2;
+                this.posY = AREA_HEIGHT / 2 - BALL_HEIGHT / 2;
+                this.speedX = 5;
+                this.speedY = 5;
+            }
+        }
+
+        let divRacket1 = document.createElement('div');
+        divRacket1.id = 'racket1';
+        divArea.appendChild(divRacket1);
+
+        let racket1 = {
+            width: RACKET_WIDTH,
+            height: RACKET_HEIGHT,
+            posX: 0,
+            posY: AREA_HEIGHT / 2 - RACKET_HEIGHT / 2,
+            speed: 0,
+            score: 0,
+
+            update: function () {
+                let racket1 = document.getElementById('racket1');
+                racket1.style.backgroundColor = 'black';
+                racket1.style.position = 'absolute';
+                racket1.style.left = this.posX + 'px';
+                racket1.style.top = this.posY + 'px';
+                racket1.style.width = this.width + 'px';
+                racket1.style.height = this.height + 'px';
+            },
+
+            updateScore: function () {
+                let scoreLeft = document.getElementById('scoreLeft');
+                scoreLeft.innerHTML = this.score;
+            }
+        }
+
+        let divRacket2 = document.createElement('div');
+        divRacket2.id = 'racket2';
+        divArea.appendChild(divRacket2);
+
+        let racket2 = {
+            width: RACKET_WIDTH,
+            height: RACKET_HEIGHT,
+            posX: AREA_WIDTH - RACKET_WIDTH,
+            posY: AREA_HEIGHT / 2 - RACKET_HEIGHT / 2,
+            speed: 0,
+            score: 0,
+
+            update: function () {
+                let racket2 = document.getElementById('racket2');
+                racket2.style.backgroundColor = 'black';
+                racket2.style.position = 'absolute';
+                racket2.style.left = this.posX + 'px';
+                racket2.style.top = this.posY + 'px';
+                racket2.style.width = this.width + 'px';
+                racket2.style.height = this.height + 'px';
+            },
+
+            updateScore: function () {
+                let scoreRight = document.getElementById('scoreRight');
+                scoreRight.innerHTML = this.score;
+            }
+        }
+
+        start.onclick = function () {
+            ball.run();
+        }
+
+        function runBall() {
+
+            ball.posX += ball.speedX;
+            ball.posY += ball.speedY;
+
+            racket1.posY += racket1.speed;
+            racket2.posY += racket2.speed;
+
+            document.onkeydown = function (e) {
+
+                if (e.keyCode === 17) {
+                    racket1.speed = 10;
+                }
+                if (e.keyCode === 16) {
+                    racket1.speed = -10;
+                }
+
+                if (e.keyCode === 40) {
+                    racket2.speed = 10;
+                }
+                if (e.keyCode === 38) {
+                    racket2.speed = -10;
+                }
+            }
+
+            document.onkeyup = function (e) {
+                if (e.keyCode === 16) {
+                    racket1.speed = 0;
+                }
+                if (e.keyCode === 17) {
+                    racket1.speed = 0;
+                }
+                if (e.keyCode === 38) {
+                    racket2.speed = 0;
+                }
+                if (e.keyCode === 40) {
+                    racket2.speed = 0;
+                }
+            }
+
+            if (racket1.posY <= 0) {
+                racket1.posY = 0;
+            }
+            if (racket2.posY <= 0) {
+                racket2.posY = 0;
+            }
+
+            if (racket1.posY + racket1.height > area.height) {
+                racket1.posY = area.height - racket1.height;
+            }
+            if (racket2.posY + racket2.height > area.height) {
+                racket2.posY = area.height - racket2.height;
+            }
+
+            if (ball.posX + ball.width > area.width) {
+                ball.speedX = 0;
+                ball.speedY = 0;
+                ball.posX = area.width - ball.width;
+                racket1.score++;
+                racket1.updateScore();
+            }
+
+            if (ball.posX + ball.width >= racket2.posX && ball.posX <= racket2.posX + racket2.width) {
+                if (ball.posY >= racket2.posY && ball.posY <= racket2.posY + racket2.height) {
+                    ball.speedX = -ball.speedX;
+                }
+            }
+
+            if (ball.posX < 0) {
+                ball.speedX = 0;
+                ball.speedY = 0;
+                ball.posX = 0;
+                racket2.score++;
+                racket2.updateScore();
+            }
+
+            if (ball.posX <= racket1.posX + racket1.width) {
+                if (ball.posY + ball.height >= racket1.posY && ball.posY <= racket1.posY + racket1.height) {
+                    ball.speedX = -ball.speedX;
+                }
+            }
+
+            if (ball.posY + ball.height > area.height) {
+                ball.speedY = -ball.speedY;
+                ball.posY = area.height - ball.height;
+            }
+
+            if (ball.posY < 0) {
+                ball.speedY = -ball.speedY;
+                ball.posY = 0;
+            }
+
+            ball.update();
+            racket1.update();
+            racket2.update();
+        }
+
+        setInterval(runBall, 35);
+        area.update();
+        ball.update();
+        racket1.update();
+        racket2.update();    
+    </script>
+</body>
+
+</html>
